@@ -17,10 +17,31 @@ document.addEventListener('DOMContentLoaded', () => {
   filterBtn.addEventListener('click', (e) => {
     filterOn = !filterOn
     filterDogs(e)
-
-
   })
 
+  document.addEventListener('click', (e) => {
+    if (filterOn){
+      adapter.getDogs()
+        .then(unfilteredDogs => {
+          let dogs = unfilteredDogs.filter(dog => dog.isGoodDog)
+          dogBar.innerHTML = ''
+          dogs.forEach((dogObj) => {
+            let dog = new Dog(dogObj)
+            dog.renderDog();
+          })
+        })
+    }
+    else{
+      adapter.getDogs()
+        .then(dogs => {
+          dogBar.innerHTML = ''
+          dogs.forEach((dogObj) => {
+            let dog = new Dog(dogObj)
+            dog.renderDog();
+          })
+        })
+    }
+  })
 
   function filterDogs(e){
     let button = e.target
@@ -29,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (filterOn){
       adapter.getDogs()
         .then(unfilteredDogs => {
-
           let dogs = unfilteredDogs.filter(dog => dog.isGoodDog)
           dogBar.innerHTML = ''
           dogs.forEach((dogObj) => {
